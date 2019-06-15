@@ -443,7 +443,7 @@ TEST(correctness, front_back_ref)
     });
 }
 
-TEST(correctness, push_element_of_itself)
+TEST(correctness, push_back_element_of_itself)
 {
     faulty_run([]
     {
@@ -460,7 +460,7 @@ TEST(correctness, push_element_of_itself)
 }
 
 
-TEST(correctness, push_element_of_itself_single)
+TEST(correctness, push_back_element_of_itself_single)
 {
     faulty_run([]
     {
