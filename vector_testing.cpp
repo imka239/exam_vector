@@ -819,6 +819,107 @@ TEST(correctness, comparison_long)
     });
 }
 
+TEST(correctness, swap_empty_self)
+{
+    faulty_run([]
+    {
+        container c;
+        swap(c, c);
+    });
+}
+
+TEST(correctness, swap_single_self)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        swap(c, c);
+    });
+}
+
+TEST(correctness, swap_self)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        swap(c, c);
+    });
+}
+
+TEST(correctness, swap_empty_single)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        c2.push_back(1);
+        swap(c, c2);
+        EXPECT_EQ(1u, c.size());
+        EXPECT_EQ(1, c[0]);
+        EXPECT_EQ(0u, c2.size());
+    });
+}
+
+TEST(correctness, swap_empty_non_empty)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        c2.push_back(1);
+        c2.push_back(2);
+        c2.push_back(3);
+        swap(c, c2);
+        EXPECT_EQ(3u, c.size());
+        EXPECT_EQ(1, c[0]);
+        EXPECT_EQ(2, c[1]);
+        EXPECT_EQ(3, c[2]);
+        EXPECT_EQ(0u, c2.size());
+    });
+}
+
+TEST(correctness, swap_single_non_empty)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        c.push_back(4);
+        c2.push_back(1);
+        c2.push_back(2);
+        c2.push_back(3);
+        swap(c, c2);
+        EXPECT_EQ(3u, c.size());
+        EXPECT_EQ(1, c[0]);
+        EXPECT_EQ(2, c[1]);
+        EXPECT_EQ(3, c[2]);
+        EXPECT_EQ(1u, c2.size());
+        EXPECT_EQ(4, c2[0]);
+    });
+}
+
+TEST(correctness, swap_non_empty_non_empty)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        c.push_back(4);
+        c.push_back(5);
+        c2.push_back(1);
+        c2.push_back(2);
+        c2.push_back(3);
+        swap(c, c2);
+        EXPECT_EQ(3u, c.size());
+        EXPECT_EQ(1, c[0]);
+        EXPECT_EQ(2, c[1]);
+        EXPECT_EQ(3, c[2]);
+        EXPECT_EQ(2u, c2.size());
+        EXPECT_EQ(4, c2[0]);
+        EXPECT_EQ(5, c2[1]);
+    });
+}
+
 TEST(exceptions, nothrow_default_ctor)
 {
     faulty_run([]
