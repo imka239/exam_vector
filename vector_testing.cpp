@@ -475,3 +475,61 @@ TEST(correctness, push_element_of_itself_single)
             EXPECT_EQ(42, c[i]);
     });
 }
+
+TEST(correctness, insert_element_of_itself_1)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        c.push_back(4);
+        c.push_back(5);
+        c.insert(c.begin() + 2, c[2]);
+
+        EXPECT_EQ(6u, c.size());
+        EXPECT_EQ(1, c[0]);
+        EXPECT_EQ(2, c[1]);
+        EXPECT_EQ(3, c[2]);
+        EXPECT_EQ(3, c[3]);
+        EXPECT_EQ(4, c[4]);
+        EXPECT_EQ(5, c[5]);
+    });
+}
+
+TEST(correctness, insert_element_of_itself_2)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        c.push_back(4);
+        c.push_back(5);
+        c.insert(c.begin() + 3, c[2]);
+
+        EXPECT_EQ(6u, c.size());
+        EXPECT_EQ(1, c[0]);
+        EXPECT_EQ(2, c[1]);
+        EXPECT_EQ(3, c[2]);
+        EXPECT_EQ(3, c[3]);
+        EXPECT_EQ(4, c[4]);
+        EXPECT_EQ(5, c[5]);
+    });
+}
+
+TEST(correctness, insert_element_of_itself_single)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(42);
+        c.insert(c.begin(), c[0]);
+
+        EXPECT_EQ(2u, c.size());
+        for (size_t i = 0; i != 2; ++i)
+            EXPECT_EQ(42, c[i]);
+    });
+}
