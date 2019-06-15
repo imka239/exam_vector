@@ -3,6 +3,7 @@
 #include "counted.h"
 
 typedef std::vector<counted> container;
+typedef std::vector<int> container_int;
 
 TEST(correctness, default_ctor)
 {
@@ -1005,7 +1006,7 @@ TEST(exceptions, reserve)
     faulty_run([]
     {
         counted::no_new_instances_guard g;
-        container c;
+        container_int c;
         c.reserve(10);
 
         EXPECT_NO_THROW(
