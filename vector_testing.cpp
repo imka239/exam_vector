@@ -209,6 +209,28 @@ TEST(correctness, subscript)
     });
 }
 
+TEST(correctness, const_subscript)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(4);
+        c.push_back(8);
+        c.push_back(15);
+        c.push_back(16);
+        c.push_back(23);
+        c.push_back(42);
+
+        container const& cc = c;
+        EXPECT_EQ(4, cc[0]);
+        EXPECT_EQ(8, cc[1]);
+        EXPECT_EQ(15, cc[2]);
+        EXPECT_EQ(16, cc[3]);
+        EXPECT_EQ(23, cc[4]);
+        EXPECT_EQ(42, cc[5]);
+    });
+}
+
 TEST(correctness, insert)
 {
     faulty_run([]
