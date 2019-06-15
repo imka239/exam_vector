@@ -627,6 +627,132 @@ TEST(correctness, insert_element_of_itself_single)
     });
 }
 
+TEST(correctness, iterators)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        c.push_back(4);
+        c.push_back(5);
+
+        container::iterator i = c.begin();
+        EXPECT_NE(c.end(), i);
+        EXPECT_EQ(1, *i);
+        ++i;
+        EXPECT_NE(c.end(), i);
+        EXPECT_EQ(2, *i);
+        ++i;
+        EXPECT_NE(c.end(), i);
+        EXPECT_EQ(3, *i);
+        ++i;
+        EXPECT_NE(c.end(), i);
+        EXPECT_EQ(4, *i);
+        ++i;
+        EXPECT_NE(c.end(), i);
+        EXPECT_EQ(5, *i);
+        ++i;
+        EXPECT_EQ(c.end(), i);
+    });
+}
+
+TEST(correctness, const_iterators)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        c.push_back(4);
+        c.push_back(5);
+
+        container const& cc = c;
+        container::const_iterator i = cc.begin();
+        EXPECT_NE(cc.end(), i);
+        EXPECT_EQ(1, *i);
+        ++i;
+        EXPECT_NE(cc.end(), i);
+        EXPECT_EQ(2, *i);
+        ++i;
+        EXPECT_NE(cc.end(), i);
+        EXPECT_EQ(3, *i);
+        ++i;
+        EXPECT_NE(cc.end(), i);
+        EXPECT_EQ(4, *i);
+        ++i;
+        EXPECT_NE(cc.end(), i);
+        EXPECT_EQ(5, *i);
+        ++i;
+        EXPECT_EQ(cc.end(), i);
+    });
+}
+
+TEST(correctness, reverse_iterators)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        c.push_back(4);
+        c.push_back(5);
+
+        container::reverse_iterator i = c.rbegin();
+        EXPECT_NE(c.rend(), i);
+        EXPECT_EQ(5, *i);
+        ++i;
+        EXPECT_NE(c.rend(), i);
+        EXPECT_EQ(4, *i);
+        ++i;
+        EXPECT_NE(c.rend(), i);
+        EXPECT_EQ(3, *i);
+        ++i;
+        EXPECT_NE(c.rend(), i);
+        EXPECT_EQ(2, *i);
+        ++i;
+        EXPECT_NE(c.rend(), i);
+        EXPECT_EQ(1, *i);
+        ++i;
+        EXPECT_EQ(c.rend(), i);
+    });
+}
+
+TEST(correctness, const_reverse_iterators)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        c.push_back(4);
+        c.push_back(5);
+
+        container const& cc = c;
+        container::const_reverse_iterator i = cc.rbegin();
+        EXPECT_NE(cc.rend(), i);
+        EXPECT_EQ(5, *i);
+        ++i;
+        EXPECT_NE(cc.rend(), i);
+        EXPECT_EQ(4, *i);
+        ++i;
+        EXPECT_NE(cc.rend(), i);
+        EXPECT_EQ(3, *i);
+        ++i;
+        EXPECT_NE(cc.rend(), i);
+        EXPECT_EQ(2, *i);
+        ++i;
+        EXPECT_NE(cc.rend(), i);
+        EXPECT_EQ(1, *i);
+        ++i;
+        EXPECT_EQ(cc.rend(), i);
+    });
+}
+
 TEST(exceptions, nothrow_default_ctor)
 {
     faulty_run([]
