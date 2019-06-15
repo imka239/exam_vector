@@ -753,6 +753,72 @@ TEST(correctness, const_reverse_iterators)
     });
 }
 
+TEST(correctness, comparison_empty_empty)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        EXPECT_TRUE(c == c2);
+        EXPECT_FALSE(c != c2);
+        EXPECT_TRUE(c <= c2);
+        EXPECT_FALSE(c < c2);
+        EXPECT_TRUE(c >= c2);
+        EXPECT_FALSE(c > c2);
+    });
+}
+
+TEST(correctness, comparison_empty_non_empty)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        c2.push_back(1);
+        EXPECT_FALSE(c == c2);
+        EXPECT_TRUE(c != c2);
+        EXPECT_TRUE(c <= c2);
+        EXPECT_TRUE(c < c2);
+        EXPECT_FALSE(c >= c2);
+        EXPECT_FALSE(c > c2);
+    });
+}
+
+TEST(correctness, comparison)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        c.push_back(1);
+        c2.push_back(2);
+        EXPECT_FALSE(c == c2);
+        EXPECT_TRUE(c != c2);
+        EXPECT_TRUE(c <= c2);
+        EXPECT_TRUE(c < c2);
+        EXPECT_FALSE(c >= c2);
+        EXPECT_FALSE(c > c2);
+    });
+}
+
+TEST(correctness, comparison_long)
+{
+    faulty_run([]
+    {
+        container c, c2;
+        c.push_back(5);
+        c.push_back(5);
+        c.push_back(1);
+        c.push_back(5);
+        c2.push_back(5);
+        c2.push_back(5);
+        c2.push_back(2);
+        EXPECT_FALSE(c == c2);
+        EXPECT_TRUE(c != c2);
+        EXPECT_TRUE(c <= c2);
+        EXPECT_TRUE(c < c2);
+        EXPECT_FALSE(c >= c2);
+        EXPECT_FALSE(c > c2);
+    });
+}
+
 TEST(exceptions, nothrow_default_ctor)
 {
     faulty_run([]
@@ -777,6 +843,21 @@ TEST(exceptions, nothrow_subscript)
         {
             container const& cc = c;
             cc[0];
+        });
+    });
+}
+
+TEST(exceptions, reserve)
+{
+    faulty_run([]
+    {
+        container c;
+        c.reserve(10);
+
+        EXPECT_NO_THROW(
+        {
+            for (size_t i = 0; i != 10; ++i)
+                c.push_back(42);
         });
     });
 }
