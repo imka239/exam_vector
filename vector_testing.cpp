@@ -533,3 +533,31 @@ TEST(correctness, insert_element_of_itself_single)
             EXPECT_EQ(42, c[i]);
     });
 }
+
+TEST(exceptions, nothrow_default_ctor)
+{
+    faulty_run([]
+    {
+        EXPECT_NO_THROW(
+        {
+            container c;
+        });
+    });
+}
+
+TEST(exceptions, nothrow_subscript)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+
+        EXPECT_NO_THROW(
+        {
+            container const& cc = c;
+            cc[0];
+        });
+    });
+}
