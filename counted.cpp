@@ -21,12 +21,15 @@ counted::counted(int data)
 }
 
 counted::counted(counted const& other)
-    : data(transcode(transcode(other.data, &other), this))
 {
     fault_injection_point();
-    fault_injection_disable fd;
-    auto p = instances.insert(this);
-    EXPECT_TRUE(p.second);
+    {
+        fault_injection_disable fd;
+        EXPECT_TRUE(instances.find(&other) != instances.end());
+        auto p = instances.insert(this);
+        EXPECT_TRUE(p.second);
+    }
+    data = transcode(transcode(other.data, &other), this);
 }
 
 counted::~counted()
