@@ -495,6 +495,47 @@ TEST(correctness, const_front_back_ref)
     });
 }
 
+TEST(correctness, data_empty)
+{
+    faulty_run([]
+    {
+        container c;
+        c.data();
+        
+        container const& cc = c;
+        cc.data();
+    });
+}
+
+TEST(correctness, data_small)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(42);
+        EXPECT_EQ(&c[0], c.data());
+        
+        container const& cc = c;
+        EXPECT_EQ(&cc[0], cc.data());
+    });
+}
+
+TEST(correctness, data)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        c.push_back(4);
+        EXPECT_EQ(&c[0], c.data());
+        
+        container const& cc = c;
+        EXPECT_EQ(&cc[0], cc.data());
+    });
+}
+
 TEST(correctness, push_back_element_of_itself)
 {
     faulty_run([]
