@@ -8,6 +8,7 @@ TEST(correctness, default_ctor)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         EXPECT_EQ(0u, c.size());
         EXPECT_TRUE(c.empty());
@@ -18,6 +19,7 @@ TEST(correctness, push_back_simple)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         EXPECT_FALSE(c.empty());
@@ -44,6 +46,7 @@ TEST(correctness, push_back_big)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         
         for (size_t i = 0; i != 20; ++i)
@@ -64,6 +67,7 @@ TEST(correctness, pop_back)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -96,6 +100,7 @@ TEST(correctness, copy_ctor)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -115,6 +120,7 @@ TEST(correctness, copy_ctor_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         container d = c;
     });
@@ -124,6 +130,7 @@ TEST(correctness, assignment)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -145,6 +152,7 @@ TEST(correctness, assignment_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -158,6 +166,7 @@ TEST(correctness, assignment_empty_2)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         container d;
         d.push_back(1);
@@ -171,6 +180,7 @@ TEST(correctness, assignment_self)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -183,6 +193,7 @@ TEST(correctness, assignment_self_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c = c;
     });
@@ -192,6 +203,7 @@ TEST(correctness, subscript)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -213,6 +225,7 @@ TEST(correctness, const_subscript)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -235,6 +248,7 @@ TEST(correctness, insert)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.insert(c.begin(), 15);
         c.insert(c.begin() + 1, 42);
@@ -257,6 +271,7 @@ TEST(correctness, erase)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -278,6 +293,7 @@ TEST(correctness, erase_begin)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -299,6 +315,7 @@ TEST(correctness, erase_end)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -320,6 +337,7 @@ TEST(correctness, erase_range_begin)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -340,6 +358,7 @@ TEST(correctness, erase_range_middle)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -359,6 +378,7 @@ TEST(correctness, erase_range_end)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -378,6 +398,7 @@ TEST(correctness, erase_range_all)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -395,6 +416,7 @@ TEST(correctness, reserve)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.reserve(10);
         c.push_back(4);
@@ -417,6 +439,7 @@ TEST(correctness, reserve_2)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(4);
         c.push_back(8);
@@ -439,6 +462,7 @@ TEST(correctness, front_back)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -452,6 +476,7 @@ TEST(correctness, const_front_back)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -467,6 +492,7 @@ TEST(correctness, front_back_ref)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -484,6 +510,7 @@ TEST(correctness, const_front_back_ref)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -499,6 +526,7 @@ TEST(correctness, data_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.data();
         
@@ -511,6 +539,7 @@ TEST(correctness, data_small)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(42);
         EXPECT_EQ(&c[0], c.data());
@@ -524,6 +553,7 @@ TEST(correctness, data)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -540,6 +570,7 @@ TEST(correctness, push_back_element_of_itself)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(0);
         c.push_back(1);
@@ -557,6 +588,7 @@ TEST(correctness, push_back_element_of_itself_single)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(42);
         c.push_back(c.front());
@@ -573,6 +605,7 @@ TEST(correctness, insert_element_of_itself_1)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -595,6 +628,7 @@ TEST(correctness, insert_element_of_itself_2)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -617,6 +651,7 @@ TEST(correctness, insert_element_of_itself_single)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(42);
         c.insert(c.begin(), c[0]);
@@ -631,6 +666,7 @@ TEST(correctness, iterators)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -662,6 +698,7 @@ TEST(correctness, const_iterators)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -694,6 +731,7 @@ TEST(correctness, reverse_iterators)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -725,6 +763,7 @@ TEST(correctness, const_reverse_iterators)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -757,6 +796,7 @@ TEST(correctness, comparison_empty_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         EXPECT_TRUE(c == c2);
         EXPECT_FALSE(c != c2);
@@ -771,6 +811,7 @@ TEST(correctness, comparison_empty_non_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         c2.push_back(1);
         EXPECT_FALSE(c == c2);
@@ -786,6 +827,7 @@ TEST(correctness, comparison)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         c.push_back(1);
         c2.push_back(2);
@@ -802,6 +844,7 @@ TEST(correctness, comparison_long)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         c.push_back(5);
         c.push_back(5);
@@ -823,6 +866,7 @@ TEST(correctness, swap_empty_self)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         swap(c, c);
     });
@@ -832,6 +876,7 @@ TEST(correctness, swap_single_self)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         swap(c, c);
@@ -842,6 +887,7 @@ TEST(correctness, swap_self)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -854,6 +900,7 @@ TEST(correctness, swap_empty_single)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         c2.push_back(1);
         swap(c, c2);
@@ -867,6 +914,7 @@ TEST(correctness, swap_empty_non_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         c2.push_back(1);
         c2.push_back(2);
@@ -884,6 +932,7 @@ TEST(correctness, swap_single_non_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         c.push_back(4);
         c2.push_back(1);
@@ -903,6 +952,7 @@ TEST(correctness, swap_non_empty_non_empty)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c, c2;
         c.push_back(4);
         c.push_back(5);
@@ -926,6 +976,7 @@ TEST(exceptions, nothrow_default_ctor)
     {
         EXPECT_NO_THROW(
         {
+            counted::no_new_instances_guard g;
             container c;
         });
     });
@@ -935,6 +986,7 @@ TEST(exceptions, nothrow_subscript)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.push_back(1);
         c.push_back(2);
@@ -952,6 +1004,7 @@ TEST(exceptions, reserve)
 {
     faulty_run([]
     {
+        counted::no_new_instances_guard g;
         container c;
         c.reserve(10);
 
