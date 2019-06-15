@@ -448,6 +448,21 @@ TEST(correctness, front_back)
     });
 }
 
+TEST(correctness, const_front_back)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+
+        container const& cc = c;
+        EXPECT_EQ(1, cc.front());
+        EXPECT_EQ(3, cc.back());
+    });
+}
+
 TEST(correctness, front_back_ref)
 {
     faulty_run([]
@@ -462,6 +477,21 @@ TEST(correctness, front_back_ref)
         c.back() = 20;
         EXPECT_EQ(10, c[0]);
         EXPECT_EQ(20, c[2]);
+    });
+}
+
+TEST(correctness, const_front_back_ref)
+{
+    faulty_run([]
+    {
+        container c;
+        c.push_back(1);
+        c.push_back(2);
+        c.push_back(3);
+        
+        container const& cc = c;
+        EXPECT_EQ(&c.front(), &cc[0]);
+        EXPECT_EQ(&c.back(), &cc[2]);
     });
 }
 
