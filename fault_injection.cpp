@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include <sys/mman.h>
+#include "mman-win32.h"
 
 namespace
 {
@@ -16,7 +16,7 @@ namespace
         
         T* allocate(size_t n)
         {
-            void* ptr = mmap(nullptr, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
+            void* ptr = mmap(nullptr, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
             if (ptr == MAP_FAILED)
                 throw std::bad_alloc();
             return reinterpret_cast<T*>(ptr);
@@ -96,7 +96,7 @@ void fault_injection_point()
 
 void faulty_run(std::function<void ()> const& f)
 {
-#if 1
+#if 0
     f();
 #else
     assert(!context);

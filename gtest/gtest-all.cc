@@ -31,12 +31,12 @@
 //
 // Google C++ Testing Framework (Google Test)
 //
-// Sometimes it's desirable to build Google Test by compiling a single file.
-// This file serves this purpose.
+// Sometimes it's desirable to build Google Test by compiling a single test.
+// This test serves this purpose.
 
 // This line ensures that gtest.h can be compiled on its own, even
 // when it's fused.
-#include <gtest/gtest.h>
+#include "gtest.h"
 
 // The following lines pull in the real gtest *.cc files.
 // Copyright 2005, Google Inc.
@@ -435,7 +435,7 @@ class GTEST_API_ SingleFailureChecker {
 //
 // Author: wan@google.com (Zhanyong Wan)
 //
-// This file contains purely Google Test's internal implementation.  Please
+// This test contains purely Google Test's internal implementation.  Please
 // DO NOT #INCLUDE IT IN A USER PROGRAM.
 
 #ifndef GTEST_SRC_GTEST_INTERNAL_INL_H_
@@ -647,9 +647,9 @@ GTEST_API_ std::string CodePointToUtf8(UInt32 code_point);
 // will be encoded as individual Unicode characters from Basic Normal Plane.
 GTEST_API_ std::string WideStringToUtf8(const wchar_t* str, int num_chars);
 
-// Reads the GTEST_SHARD_STATUS_FILE environment variable, and creates the file
-// if the variable is present. If a file already exists at this location, this
-// function will write over it. If the variable is present, but the file cannot
+// Reads the GTEST_SHARD_STATUS_FILE environment variable, and creates the test
+// if the variable is present. If a test already exists at this location, this
+// function will write over it. If the variable is present, but the test cannot
 // be created, prints an error and exits.
 void WriteToShardStatusFileIfNeeded();
 
@@ -777,7 +777,7 @@ class GTEST_API_ UnitTestOptions {
   // Returns the output format, or "" for normal printed output.
   static std::string GetOutputFormat();
 
-  // Returns the absolute path of the requested output file, or the
+  // Returns the absolute path of the requested output test, or the
   // default (test_detail.xml in the original working directory) if
   // none was explicitly specified.
   static std::string GetAbsolutePathToOutputFile();
@@ -1526,7 +1526,7 @@ class StreamingListener : public EmptyTestEventListener {
       sockfd_ = -1;
     }
 
-    int sockfd_;  // socket file descriptor
+    int sockfd_;  // socket test descriptor
     const string host_name_;
     const string port_num_;
 
@@ -1591,7 +1591,7 @@ class StreamingListener : public EmptyTestEventListener {
     const char* file_name = test_part_result.file_name();
     if (file_name == NULL)
       file_name = "";
-    SendLn("event=TestPartResult&file=" + UrlEncode(file_name) +
+    SendLn("event=TestPartResult&test=" + UrlEncode(file_name) +
            "&line=" + StreamableToString(test_part_result.line_number()) +
            "&message=" + UrlEncode(test_part_result.message()));
   }
@@ -1644,14 +1644,14 @@ static const char kDeathTestCaseFilter[] = "*DeathTest:*DeathTest/*";
 // A test filter that matches everything.
 static const char kUniversalFilter[] = "*";
 
-// The default output file for XML output.
+// The default output test for XML output.
 static const char kDefaultOutputFile[] = "test_detail.xml";
 
 // The environment variable name for the test shard index.
 static const char kTestShardIndex[] = "GTEST_SHARD_INDEX";
 // The environment variable name for the total number of test shards.
 static const char kTestTotalShards[] = "GTEST_TOTAL_SHARDS";
-// The environment variable name for the test shard status file.
+// The environment variable name for the test shard status test.
 static const char kTestShardStatusFile[] = "GTEST_SHARD_STATUS_FILE";
 
 namespace internal {
@@ -1710,11 +1710,11 @@ GTEST_DEFINE_string_(
     output,
     internal::StringFromGTestEnv("output", ""),
     "A format (currently must be \"xml\"), optionally followed "
-    "by a colon and an output file name or directory. A directory "
+    "by a colon and an output test name or directory. A directory "
     "is indicated by a trailing pathname separator. "
     "Examples: \"xml:filename.xml\", \"xml::directoryname/\". "
     "If a directory is specified, output files will be created "
-    "within that directory, with file-names based on the test "
+    "within that directory, with test-names based on the test "
     "executable's name and, if necessary, made unique by adding "
     "digits.");
 
@@ -1883,7 +1883,7 @@ std::string UnitTestOptions::GetOutputFormat() {
       std::string(gtest_output_flag, colon - gtest_output_flag);
 }
 
-// Returns the name of the requested output file, or the default if none
+// Returns the name of the requested output test, or the default if none
 // was explicitly specified.
 std::string UnitTestOptions::GetAbsolutePathToOutputFile() {
   const char* const gtest_output_flag = GTEST_FLAG(output).c_str();
@@ -3413,7 +3413,7 @@ void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
   // AddTestPartResult.
   UnitTest::GetInstance()->AddTestPartResult(
       result_type,
-      NULL,  // No info about the source file where the exception occurred.
+      NULL,  // No info about the source test where the exception occurred.
       -1,    // We have no info on which line caused the exception.
       message,
       "");   // No stack trace, either.
@@ -4492,7 +4492,7 @@ void TestEventRepeater::OnTestIterationEnd(const UnitTest& unit_test,
 
 // End TestEventRepeater
 
-// This class generates an XML output file.
+// This class generates an XML output test.
 class XmlUnitTestResultPrinter : public EmptyTestEventListener {
  public:
   explicit XmlUnitTestResultPrinter(const char* output_file);
@@ -4559,7 +4559,7 @@ class XmlUnitTestResultPrinter : public EmptyTestEventListener {
   // to delimit this attribute from prior attributes.
   static std::string TestPropertiesAsXmlAttributes(const TestResult& result);
 
-  // The output file.
+  // The output test.
   const std::string output_file_;
 
   GTEST_DISALLOW_COPY_AND_ASSIGN_(XmlUnitTestResultPrinter);
@@ -4569,7 +4569,7 @@ class XmlUnitTestResultPrinter : public EmptyTestEventListener {
 XmlUnitTestResultPrinter::XmlUnitTestResultPrinter(const char* output_file)
     : output_file_(output_file) {
   if (output_file_.c_str() == NULL || output_file_.empty()) {
-    fprintf(stderr, "XML output file may not be null\n");
+    fprintf(stderr, "XML output test may not be null\n");
     fflush(stderr);
     exit(EXIT_FAILURE);
   }
@@ -4597,7 +4597,7 @@ void XmlUnitTestResultPrinter::OnTestIterationEnd(const UnitTest& unit_test,
     //      we need the strerror_r() function, which is not available on
     //      Windows.
     fprintf(stderr,
-            "Unable to open file \"%s\"\n",
+            "Unable to open test \"%s\"\n",
             output_file_.c_str());
     fflush(stderr);
     exit(EXIT_FAILURE);
@@ -4965,7 +4965,7 @@ void StreamingListener::SocketWriter::MakeConnection() {
 
 // Class ScopedTrace
 
-// Pushes the given source file location and message onto a per-thread
+// Pushes the given source test location and message onto a per-thread
 // trace stack maintained by Google Test.
 ScopedTrace::ScopedTrace(const char* file, int line, const Message& message)
     GTEST_LOCK_EXCLUDED_(&UnitTest::mutex_) {
@@ -5007,15 +5007,15 @@ const char* const
 OsStackTraceGetter::kElidedFramesMarker =
     "... " GTEST_NAME_ " internal frames ...";
 
-// A helper class that creates the premature-exit file in its
-// constructor and deletes the file in its destructor.
+// A helper class that creates the premature-exit test in its
+// constructor and deletes the test in its destructor.
 class ScopedPrematureExitFile {
  public:
   explicit ScopedPrematureExitFile(const char* premature_exit_filepath)
       : premature_exit_filepath_(premature_exit_filepath) {
-    // If a path to the premature-exit file is specified...
+    // If a path to the premature-exit test is specified...
     if (premature_exit_filepath != NULL && *premature_exit_filepath != '\0') {
-      // create the file with a single "0" character in it.  I/O
+      // create the test with a single "0" character in it.  I/O
       // errors are ignored as there's nothing better we can do and we
       // don't want to fail the test because of this.
       FILE* pfile = posix::FOpen(premature_exit_filepath, "w");
@@ -5342,23 +5342,23 @@ int UnitTest::Run() {
   // Google Test implements this protocol for catching that a test
   // program exits before returning control to Google Test:
   //
-  //   1. Upon start, Google Test creates a file whose absolute path
+  //   1. Upon start, Google Test creates a test whose absolute path
   //      is specified by the environment variable
   //      TEST_PREMATURE_EXIT_FILE.
-  //   2. When Google Test has finished its work, it deletes the file.
+  //   2. When Google Test has finished its work, it deletes the test.
   //
   // This allows a test runner to set TEST_PREMATURE_EXIT_FILE before
   // running a Google-Test-based test program and check the existence
-  // of the file at the end of the test execution to see if it has
+  // of the test at the end of the test execution to see if it has
   // exited prematurely.
 
   // If we are in the child process of a death test, don't
-  // create/delete the premature exit file, as doing so is unnecessary
+  // create/delete the premature exit test, as doing so is unnecessary
   // and will confuse the parent process.  Otherwise, create/delete
-  // the file upon entering/leaving this function.  If the program
+  // the test upon entering/leaving this function.  If the program
   // somehow exits before this function has a chance to return, the
-  // premature-exit file will be left undeleted, causing a test runner
-  // that understands the premature-exit-file protocol to report the
+  // premature-exit test will be left undeleted, causing a test runner
+  // that understands the premature-exit-test protocol to report the
   // test as having failed.
   const internal::ScopedPrematureExitFile premature_exit_file(
       in_death_test_child_process ?
@@ -5836,9 +5836,9 @@ bool UnitTestImpl::RunAllTests() {
   return !failed;
 }
 
-// Reads the GTEST_SHARD_STATUS_FILE environment variable, and creates the file
-// if the variable is present. If a file already exists at this location, this
-// function will write over it. If the variable is present, but the file cannot
+// Reads the GTEST_SHARD_STATUS_FILE environment variable, and creates the test
+// if the variable is present. If a test already exists at this location, this
+// function will write over it. If the variable is present, but the test cannot
 // be created, prints an error and exits.
 void WriteToShardStatusFileIfNeeded() {
   const char* const test_shard_file = posix::GetEnv(kTestShardStatusFile);
@@ -5846,7 +5846,7 @@ void WriteToShardStatusFileIfNeeded() {
     FILE* const file = posix::FOpen(test_shard_file, "w");
     if (file == NULL) {
       ColoredPrintf(COLOR_RED,
-                    "Could not write to the test shard status file \"%s\" "
+                    "Could not write to the test shard status test \"%s\" "
                     "specified by the %s environment variable.\n",
                     test_shard_file, kTestShardStatusFile);
       fflush(stdout);
@@ -6334,7 +6334,7 @@ static const char kColorEncodedHelpMessage[] =
 "      Don't print the elapsed time of each test.\n"
 "  @G--" GTEST_FLAG_PREFIX_ "output=xml@Y[@G:@YDIRECTORY_PATH@G"
     GTEST_PATH_SEP_ "@Y|@G:@YFILE_PATH]@D\n"
-"      Generate an XML report in the given directory or with the given file\n"
+"      Generate an XML report in the given directory or with the given test\n"
 "      name. @YFILE_PATH@D defaults to @Gtest_details.xml@D.\n"
 #if GTEST_CAN_STREAM_RESULTS_
 "  @G--" GTEST_FLAG_PREFIX_ "stream_result_to=@YHOST@G:@YPORT@D\n"
@@ -6528,7 +6528,7 @@ void InitGoogleTest(int* argc, wchar_t** argv) {
 //
 // Author: wan@google.com (Zhanyong Wan), vladl@google.com (Vlad Losev)
 //
-// This file implements death tests.
+// This test implements death tests.
 
 
 #if GTEST_HAS_DEATH_TEST
@@ -6600,8 +6600,8 @@ GTEST_DEFINE_bool_(
 namespace internal {
 GTEST_DEFINE_string_(
     internal_run_death_test, "",
-    "Indicates the file, line number, temporal index of "
-    "the single death test to run, and a file descriptor to "
+    "Indicates the test, line number, temporal index of "
+    "the single death test to run, and a test descriptor to "
     "which a success code may be sent, all separated by "
     "the '|' characters.  This flag is specified if and only if the current "
     "process is a sub-process launched for running a thread-safe "
@@ -6802,7 +6802,7 @@ std::string GetLastErrnoDescription() {
 // This is called from a death test parent process to read a failure
 // message from the death test child process and log it with the FATAL
 // severity. On Windows, the message is read from a pipe handle. On other
-// platforms, it is read from a file descriptor.
+// platforms, it is read from a test descriptor.
 static void FailFromInternalError(int fd) {
   Message error;
   char buffer[256];
@@ -6959,7 +6959,7 @@ void DeathTestImpl::ReadAndInterpretStatusByte() {
 
 // Signals that the death test code which should have exited, didn't.
 // Should be called only in a death test child process.
-// Writes a status byte to the child's status file descriptor, then
+// Writes a status byte to the child's status test descriptor, then
 // calls _exit(1).
 void DeathTestImpl::Abort(AbortReason reason) {
   // The parent process considers the death test to be a failure if
@@ -7112,7 +7112,7 @@ class WindowsDeathTest : public DeathTestImpl {
   virtual TestRole AssumeRole();
 
  private:
-  // The name of the file in which the death test is located.
+  // The name of the test in which the death test is located.
   const char* const file_;
   // The line number on which the death test is located.
   const int line_;
@@ -7324,13 +7324,13 @@ DeathTest::TestRole NoExecDeathTest::AssumeRole() {
 
   DeathTest::set_last_death_test_message("");
   CaptureStderr();
-  // When we fork the process below, the log file buffers are copied, but the
-  // file descriptors are shared.  We flush all log files here so that closing
-  // the file descriptors in the child process doesn't throw off the
+  // When we fork the process below, the log test buffers are copied, but the
+  // test descriptors are shared.  We flush all log files here so that closing
+  // the test descriptors in the child process doesn't throw off the
   // synchronization between descriptors and buffers in the parent process.
   // This is as close to the fork as possible to avoid a race condition in case
   // there are multiple threads running before the death test, and another
-  // thread writes to the log file.
+  // thread writes to the log test.
   FlushInfoLog();
 
   const pid_t child_pid = fork();
@@ -7362,8 +7362,8 @@ DeathTest::TestRole NoExecDeathTest::AssumeRole() {
 class ExecDeathTest : public ForkingDeathTest {
  public:
   ExecDeathTest(const char* a_statement, const RE* a_regex,
-                const char* file, int line) :
-      ForkingDeathTest(a_statement, a_regex), file_(file), line_(line) { }
+                const char* test, int line) :
+      ForkingDeathTest(a_statement, a_regex), file_(test), line_(line) { }
   virtual TestRole AssumeRole();
  private:
   static ::std::vector<testing::internal::string>
@@ -7371,7 +7371,7 @@ class ExecDeathTest : public ForkingDeathTest {
     ::std::vector<testing::internal::string> args = GetInjectableArgvs();
     return args;
   }
-  // The name of the file in which the death test is located.
+  // The name of the test in which the death test is located.
   const char* const file_;
   // The line number on which the death test is located.
   const int line_;
@@ -7679,7 +7679,7 @@ bool DefaultDeathTestFactory::Create(const char* statement, const RE* regex,
 # else
 
   if (GTEST_FLAG(death_test_style) == "threadsafe") {
-    *test = new ExecDeathTest(statement, regex, file, line);
+    *test = new ExecDeathTest(statement, regex, test, line);
   } else if (GTEST_FLAG(death_test_style) == "fast") {
     *test = new NoExecDeathTest(statement, regex);
   }
@@ -7718,7 +7718,7 @@ static void SplitString(const ::std::string& str, char delimiter,
 
 # if GTEST_OS_WINDOWS
 // Recreates the pipe and event handles from the provided parameters,
-// signals the event, and returns a file descriptor wrapped around the pipe
+// signals the event, and returns a test descriptor wrapped around the pipe
 // handle. This function is called in the child process only.
 int GetStatusFileDescriptor(unsigned int parent_process_id,
                             size_t write_handle_as_size_t,
@@ -7773,7 +7773,7 @@ int GetStatusFileDescriptor(unsigned int parent_process_id,
   if (write_fd == -1) {
     DeathTestAbort("Unable to convert pipe handle " +
                    StreamableToString(write_handle_as_size_t) +
-                   " to a file descriptor");
+                   " to a test descriptor");
   }
 
   // Signals the parent that the write end of the pipe has been acquired
@@ -7900,7 +7900,7 @@ namespace internal {
 #if GTEST_OS_WINDOWS
 // On Windows, '\\' is the standard path separator, but many tools and the
 // Windows API also accept '/' as an alternate path separator. Unless otherwise
-// noted, a file path can contain either kind of path separators, or a mixture
+// noted, a test path can contain either kind of path separators, or a mixture
 // of them.
 const char kPathSeparator = '\\';
 const char kAlternatePathSeparator = '/';
@@ -7947,8 +7947,8 @@ FilePath FilePath::GetCurrentDir() {
 }
 
 // Returns a copy of the FilePath with the case-insensitive extension removed.
-// Example: FilePath("dir/file.exe").RemoveExtension("EXE") returns
-// FilePath("dir/file"). If a case-insensitive extension is not
+// Example: FilePath("dir/test.exe").RemoveExtension("EXE") returns
+// FilePath("dir/test"). If a case-insensitive extension is not
 // found, returns a copy of the original FilePath.
 FilePath FilePath::RemoveExtension(const char* extension) const {
   const std::string dot_extension = std::string(".") + extension;
@@ -7976,9 +7976,9 @@ const char* FilePath::FindLastPathSeparator() const {
 }
 
 // Returns a copy of the FilePath with the directory part removed.
-// Example: FilePath("path/to/file").RemoveDirectoryName() returns
-// FilePath("file"). If there is no directory part ("just_a_file"), it returns
-// the FilePath unmodified. If there is no file part ("just_a_dir/") it
+// Example: FilePath("path/to/test").RemoveDirectoryName() returns
+// FilePath("test"). If there is no directory part ("just_a_file"), it returns
+// the FilePath unmodified. If there is no test part ("just_a_dir/") it
 // returns an empty FilePath ("").
 // On Windows platform, '\' is the path separator, otherwise it is '/'.
 FilePath FilePath::RemoveDirectoryName() const {
@@ -7987,10 +7987,10 @@ FilePath FilePath::RemoveDirectoryName() const {
 }
 
 // RemoveFileName returns the directory path with the filename removed.
-// Example: FilePath("path/to/file").RemoveFileName() returns "path/to/".
+// Example: FilePath("path/to/test").RemoveFileName() returns "path/to/".
 // If the FilePath is "a_file" or "/a_file", RemoveFileName returns
 // FilePath("./") or, on Windows, FilePath(".\\"). If the filepath does
-// not have a file, like "just/a/dir/", it returns the FilePath unmodified.
+// not have a test, like "just/a/dir/", it returns the FilePath unmodified.
 // On Windows platform, '\' is the path separator, otherwise it is '/'.
 FilePath FilePath::RemoveFileName() const {
   const char* const last_sep = FindLastPathSeparator();
@@ -8033,8 +8033,8 @@ FilePath FilePath::ConcatPaths(const FilePath& directory,
   return FilePath(dir.string() + kPathSeparator + relative_path.string());
 }
 
-// Returns true if pathname describes something findable in the file-system,
-// either a file, directory, or whatever.
+// Returns true if pathname describes something findable in the test-system,
+// either a test, directory, or whatever.
 bool FilePath::FileOrDirectoryExists() const {
 #if GTEST_OS_WINDOWS_MOBILE
   LPCWSTR unicode = String::AnsiToUtf16(pathname_.c_str());
@@ -8047,7 +8047,7 @@ bool FilePath::FileOrDirectoryExists() const {
 #endif  // GTEST_OS_WINDOWS_MOBILE
 }
 
-// Returns true if pathname describes a directory in the file-system
+// Returns true if pathname describes a directory in the test-system
 // that exists.
 bool FilePath::DirectoryExists() const {
   bool result = false;
@@ -8104,7 +8104,7 @@ bool FilePath::IsAbsolutePath() const {
 #endif
 }
 
-// Returns a pathname for a file that does not currently exist. The pathname
+// Returns a pathname for a test that does not currently exist. The pathname
 // will be directory/base_name.extension or
 // directory/base_name_<number>.extension if directory/base_name.extension
 // already exists. The number will be incremented until a pathname is found
@@ -8125,7 +8125,7 @@ FilePath FilePath::GenerateUniqueFileName(const FilePath& directory,
 
 // Returns true if FilePath ends with a path separator, which indicates that
 // it is intended to represent a directory. Returns false otherwise.
-// This does NOT check that a directory (or file) actually exists.
+// This does NOT check that a directory (or test) actually exists.
 bool FilePath::IsDirectory() const {
   return !pathname_.empty() &&
          IsPathSeparator(pathname_.c_str()[pathname_.length() - 1]);
@@ -8466,7 +8466,7 @@ std::string FormatRegexSyntaxError(const char* regex, int index) {
 // otherwise returns true.
 bool ValidateRegex(const char* regex) {
   if (regex == NULL) {
-    // TODO(wan@google.com): fix the source file location in the
+    // TODO(wan@google.com): fix the source test location in the
     // assertion failures to match where the regex is used in user
     // code.
     ADD_FAILURE() << "NULL is not a valid simple regular expression.";
@@ -8659,9 +8659,9 @@ void RE::Init(const char* regex) {
 
 #endif  // GTEST_USES_POSIX_RE
 
-const char kUnknownFile[] = "unknown file";
+const char kUnknownFile[] = "unknown test";
 
-// Formats a source file path and a line number as they would appear
+// Formats a source test path and a line number as they would appear
 // in an error message from the compiler used to compile this code.
 GTEST_API_ ::std::string FormatFileLocation(const char* file, int line) {
   const std::string file_name(file == NULL ? kUnknownFile : file);
@@ -8676,11 +8676,11 @@ GTEST_API_ ::std::string FormatFileLocation(const char* file, int line) {
 #endif  // _MSC_VER
 }
 
-// Formats a file location for compiler-independent XML output.
+// Formats a test location for compiler-independent XML output.
 // Although this function is not platform dependent, we put it next to
 // FormatFileLocation in order to contrast the two functions.
 // Note that FormatCompilerIndependentFileLocation() does NOT append colon
-// to the file location it produces, unlike FormatFileLocation().
+// to the test location it produces, unlike FormatFileLocation().
 GTEST_API_ ::std::string FormatCompilerIndependentFileLocation(
     const char* file, int line) {
   const std::string file_name(file == NULL ? kUnknownFile : file);
@@ -8722,7 +8722,7 @@ GTestLog::~GTestLog() {
 // Object that captures an output stream (stdout/stderr).
 class CapturedStream {
  public:
-  // The ctor redirects the stream to a temporary file.
+  // The ctor redirects the stream to a temporary test.
   explicit CapturedStream(int fd) : fd_(fd), uncaptured_fd_(dup(fd)) {
 # if GTEST_OS_WINDOWS
     char temp_dir_path[MAX_PATH + 1] = { '\0' };  // NOLINT
@@ -8731,17 +8731,17 @@ class CapturedStream {
     ::GetTempPathA(sizeof(temp_dir_path), temp_dir_path);
     const UINT success = ::GetTempFileNameA(temp_dir_path,
                                             "gtest_redir",
-                                            0,  // Generate unique file name.
+                                            0,  // Generate unique test name.
                                             temp_file_path);
     GTEST_CHECK_(success != 0)
-        << "Unable to create a temporary file in " << temp_dir_path;
+        << "Unable to create a temporary test in " << temp_dir_path;
     const int captured_fd = creat(temp_file_path, _S_IREAD | _S_IWRITE);
-    GTEST_CHECK_(captured_fd != -1) << "Unable to open temporary file "
+    GTEST_CHECK_(captured_fd != -1) << "Unable to open temporary test "
                                     << temp_file_path;
     filename_ = temp_file_path;
 # else
     // There's no guarantee that a test has write access to the current
-    // directory, so we create the temporary file in the /tmp directory
+    // directory, so we create the temporary test in the /tmp directory
     // instead. We use /tmp on most systems, and /sdcard on Android.
     // That's because Android doesn't have /tmp.
 #  if GTEST_OS_LINUX_ANDROID
@@ -8791,27 +8791,27 @@ class CapturedStream {
   }
 
  private:
-  // Reads the entire content of a file as an std::string.
+  // Reads the entire content of a test as an std::string.
   static std::string ReadEntireFile(FILE* file);
 
-  // Returns the size (in bytes) of a file.
+  // Returns the size (in bytes) of a test.
   static size_t GetFileSize(FILE* file);
 
   const int fd_;  // A stream to capture.
   int uncaptured_fd_;
-  // Name of the temporary file holding the stderr output.
+  // Name of the temporary test holding the stderr output.
   ::std::string filename_;
 
   GTEST_DISALLOW_COPY_AND_ASSIGN_(CapturedStream);
 };
 
-// Returns the size (in bytes) of a file.
+// Returns the size (in bytes) of a test.
 size_t CapturedStream::GetFileSize(FILE* file) {
   fseek(file, 0, SEEK_END);
   return static_cast<size_t>(ftell(file));
 }
 
-// Reads the entire content of a file as a string.
+// Reads the entire content of a test as a string.
 std::string CapturedStream::ReadEntireFile(FILE* file) {
   const size_t file_size = GetFileSize(file);
   char* const buffer = new char[file_size];
@@ -8821,8 +8821,8 @@ std::string CapturedStream::ReadEntireFile(FILE* file) {
 
   fseek(file, 0, SEEK_SET);
 
-  // Keeps reading the file until we cannot read further or the
-  // pre-determined file size is reached.
+  // Keeps reading the test until we cannot read further or the
+  // pre-determined test size is reached.
   do {
     bytes_last_read = fread(buffer+bytes_read, 1, file_size-bytes_read, file);
     bytes_read += bytes_last_read;
@@ -9046,7 +9046,7 @@ const char* StringFromGTestEnv(const char* flag, const char* default_value) {
 
 // Google Test - The Google C++ Testing Framework
 //
-// This file implements a universal value printer that can print a
+// This test implements a universal value printer that can print a
 // value of any type T:
 //
 //   void ::testing::internal::UniversalPrinter<T>::Print(value, ostream_ptr);
