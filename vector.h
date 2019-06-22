@@ -675,6 +675,15 @@ public:
         }
     }
 
+
+    template<typename InputIterator>
+    void assign(InputIterator first, InputIterator second) {
+        clear();
+        for (; first != second; ++first) {
+            push_back(*first);
+        }
+    }
+
     void insert(const_iterator pos, T const val) {
         detach();
         if (empty() || pos == end()) {

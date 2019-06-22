@@ -1024,3 +1024,28 @@ c.pop_back();
 });
 });
 }
+
+
+TEST(correctness, assign) {
+    vector<int> a;
+    for (int i = 0; i < 10; ++i) {
+        a.push_back(10);
+    }
+    vector<int> b;
+    b.assign(a.begin(), a.end());
+    EXPECT_EQ(a, b);
+}
+
+TEST(correctness, clear) {
+faulty_run([]
+{
+counted::no_new_instances_guard g;
+container c;
+for (size_t i = 0; i != 10; i++) {
+c.push_back(228);
+}
+EXPECT_EQ(10u, c.size());
+c.clear();
+EXPECT_EQ(0u, c.size());
+});
+}
